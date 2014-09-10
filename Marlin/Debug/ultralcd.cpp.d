@@ -35,4 +35,5 @@
   C:\Program\ Files\ (x86)\Arduino\hardware\arduino\cores\arduino/new.h \
   C:\Users\Kevin\AppData\Local\VMicro\Arduino\Builds\Marlin\mega2560\/stepper.h \
   C:\Users\Kevin\AppData\Local\VMicro\Arduino\Builds\Marlin\mega2560\/ConfigurationStore.h \
-  C:\Users\Kevin\AppData\Local\VMicro\Arduino\Builds\Marlin\mega2560\/ultralcd_implementation_RigidBot.h
+  C:\Users\Kevin\AppData\Local\VMicro\Arduino\Builds\Marlin\mega2560\/ultralcd_implementation_RigidBot.h \
+  C:\Users\Kevin\AppData\Local\VMicro\Arduino\Builds\Marlin\mega2560\/LiquidCrystalFast_Mod.h

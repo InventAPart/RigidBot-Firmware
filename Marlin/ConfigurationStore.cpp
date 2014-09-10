@@ -37,14 +37,27 @@ void _EEPROM_readData(int &pos, uint8_t* value, uint8_t size)
 // the default values are used whenever there is a change to the data, to prevent
 // wrong data being written to the variables.
 // ALSO:  always make sure the variables in the Store and retrieve sections are in the same order.
-#define EEPROM_VERSION "V07"
+#define EEPROM_VERSION "V08"
+
+uint16_t VersionChecksumCalc()
+{
+	uint16_t chksm = 0;
+	const char *str = PSTR(STRING_VERSION_CONFIG_H);
+	char ch;
+	while(ch=pgm_read_byte(str++))
+		chksm += ch;
+	return chksm;
+}
 
 #ifdef EEPROM_SETTINGS
 void Config_StoreSettings() 
 {
+  uint16_t versionChecksum = VersionChecksumCalc();
+  
   char ver[4]= "000";
   int i=EEPROM_OFFSET;
-  EEPROM_WRITE_VAR(i,ver); // invalidate data first 
+  EEPROM_WRITE_VAR(i,ver); // invalidate data first
+  EEPROM_WRITE_VAR(i,versionChecksum); // store version checksum for restoring settings on reprogram
   EEPROM_WRITE_VAR(i,axis_steps_per_unit);  
   EEPROM_WRITE_VAR(i,max_feedrate);  
   EEPROM_WRITE_VAR(i,max_acceleration_units_per_sq_second);
@@ -91,6 +104,7 @@ void Config_StoreSettings()
 void Config_PrintSettings()
 {  // Always have this function, even with EEPROM_SETTINGS disabled, the current values will be shown
     SERIAL_ECHO_START;
+
     SERIAL_ECHOLNPGM("Steps per unit:");
     SERIAL_ECHO_START;
     SERIAL_ECHOPAIR("  M92 X",axis_steps_per_unit[0]);
@@ -157,12 +171,18 @@ void Config_PrintSettings()
 #ifdef EEPROM_SETTINGS
 void Config_RetrieveSettings()
 {
+	uint16_t versionChecksum;
     int i=EEPROM_OFFSET;
     char stored_ver[4];
     char ver[4]=EEPROM_VERSION;
     EEPROM_READ_VAR(i,stored_ver); //read stored version
+    EEPROM_READ_VAR(i,versionChecksum); //read stored version checksum
     //  SERIAL_ECHOLN("Version: [" << ver << "] Stored version: [" << stored_ver << "]");
-    if (strncmp(ver,stored_ver,3) == 0)
+#ifdef EEPROM_ALWAYS_PRESERVE
+    if (strncmp(ver,stored_ver,3) == 0)		//	still compare settings version
+#else
+    if (strncmp(ver,stored_ver,3) == 0 && versionChecksum == VersionChecksumCalc())	//	compare settings version and version checksum
+#endif
     {
         // version number match
         EEPROM_READ_VAR(i,axis_steps_per_unit);  

@@ -17,4 +17,8 @@
   C:\Users\Kevin\AppData\Local\VMicro\Arduino\Builds\Marlin\mega2560\/MarlinSerial.h \
   C:\Program\ Files\ (x86)\Arduino\hardware\arduino\cores\arduino/WString.h \
   C:\Users\Kevin\AppData\Local\VMicro\Arduino\Builds\Marlin\mega2560\/pins.h \
+  C:\Users\Kevin\AppData\Local\VMicro\Arduino\Builds\Marlin\mega2560\/LiquidCrystalFast_Mod.h \
+  C:\Program\ Files\ (x86)\Arduino\hardware\arduino\cores\arduino/Print.h \
+  C:\Program\ Files\ (x86)\Arduino\hardware\arduino\cores\arduino/Printable.h \
+  C:\Program\ Files\ (x86)\Arduino\hardware\arduino\cores\arduino/new.h \
   C:\Program\ Files\ (x86)\Arduino\hardware\arduino\cores\arduino/arduino.h

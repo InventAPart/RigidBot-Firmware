@@ -1,14 +1,16 @@
 #ifndef CONFIGURATION_H
 #define CONFIGURATION_H
 
-
 //	Uncomment the following options for your machine
 //#define	RIGIDBOT_BIG
 //#define	RIGIDBOT_DUAL_EXTRUDER
 
 
+#define		RIGIDBOT_VERSION	"1.1"
+#define		RIGIDBOT_DATE		"2014-08-11"
 
-// This configurtion file contains the basic settings.
+
+// This configuration file contains the basic settings.
 // Advanced settings can be found in Configuration_adv.h
 // BASIC SETTINGS: select your board type, temperature sensor type, axis scaling, and endstop configuration
 
@@ -163,10 +165,10 @@
 //    #define  DEFAULT_Ki 2.25
 //    #define  DEFAULT_Kd 440
 
-// RigidBot
-	#define  DEFAULT_Kp 22.59
-	#define  DEFAULT_Ki 1.52
-	#define  DEFAULT_Kd 83.63
+ //RigidBot New (PID Autotune didn't work)
+ 	#define  DEFAULT_Kp 10
+ 	#define  DEFAULT_Ki 1.07
+ 	#define  DEFAULT_Kd 260
 
 #endif // PIDTEMP
 
@@ -295,7 +297,7 @@ const bool Z_ENDSTOPS_INVERTING = true; // set to true to invert the logic of th
 #define X_DUAL_REDUCTION 57
 #else
 #define X_MAX_BASE 254
-#define Y_MAX_BASE 254
+#define Y_MAX_BASE 248
 #define Z_MAX_BASE 254
 #define X_DUAL_REDUCTION 57
 #endif
@@ -319,6 +321,9 @@ const bool Z_ENDSTOPS_INVERTING = true; // set to true to invert the logic of th
 #define X_CENTER_POS	((X_MIN_POS + X_MAX_POS) / 2)
 #define Y_CENTER_POS	((Y_MIN_POS + Y_MAX_POS) / 2)
 
+#define Z_LIFT_DEFAULT		20
+
+
 ////	Rest position after homing all axis. Not yet implemented
 //#define X_HOME_REST	X_MIN_POS	
 //#define Y_HOME_REST	(Y_MAX_POS - 10)
@@ -341,7 +346,7 @@ const bool Z_ENDSTOPS_INVERTING = true; // set to true to invert the logic of th
 // default settings
 
 #define DEFAULT_AXIS_STEPS_PER_UNIT   {44.3090,22.1545,1600,53.5}//760*1.1} //z was 400 before new motors // default steps per unit for Rigidbot //22.1545 for 8th ms
-#define DEFAULT_MAX_FEEDRATE          {500, 500, 3, 25}    // (mm/sec)
+#define DEFAULT_MAX_FEEDRATE          {500, 500, 4, 25}    // (mm/sec)
 //#define DEFAULT_MAX_ACCELERATION      {9000,9000,100,10000}    // X, Y, Z, E maximum start speed for accelerated moves. E default values are good for skeinforge 40+, for older versions raise them a lot.
 #define DEFAULT_MAX_ACCELERATION      {800,600,100,10000}    // X, Y, Z, E maximum start speed for accelerated moves. E default values are good for skeinforge 40+, for older versions raise them a lot.
 //#define DEFAULT_MAX_ACCELERATION      {3000,3000,100,10000}    // X, Y, Z, E maximum start speed for accelerated moves. E default values are good for skeinforge 40+, for older versions raise them a lot.
@@ -378,13 +383,17 @@ const bool Z_ENDSTOPS_INVERTING = true; // set to true to invert the logic of th
 //to disable EEPROM Serial responses and decrease program space by ~1700 byte: comment this out:
 // please keep turned on if you can.
 #define EEPROM_CHITCHAT
+// Uncomment this if you want to always preserve settings in EEPROM (assuming no format change)
+// Otherwise reprogramming the board will force loading of defaults
+//#define EEPROM_ALWAYS_PRESERVE
+
 
 // Preheat Constants
-#define PLA_PREHEAT_HOTEND_TEMP		180
+#define PLA_PREHEAT_HOTEND_TEMP		200
 #define PLA_PREHEAT_HPB_TEMP		70
 #define PLA_PREHEAT_FAN_SPEED		255   // Insert Value between 0 and 255
 
-#define ABS_PREHEAT_HOTEND_TEMP		240
+#define ABS_PREHEAT_HOTEND_TEMP		230
 #define ABS_PREHEAT_HPB_TEMP		100
 #define ABS_PREHEAT_FAN_SPEED		255   // Insert Value between 0 and 255
 

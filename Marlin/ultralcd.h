@@ -12,18 +12,34 @@
   void lcd_setalertstatuspgm(const char* message);
   void lcd_reset_alert_level();
   
-  static unsigned char blink = 0;	// Variable for visualisation of fan rotation in GLCD
+  static unsigned char blink = 0;	// Variable for visualization of fan rotation in GLCD
 
   #define HIDE_BACK_MENUS			//	Uncomment to hide back menus (left button will still trigger them)
+  #define LCD_REVERSE_FILE_ORDER	//	Uncomment to reverse file order displayed (should typically list newest files first)
 
   #define LCD_MESSAGEPGM(x) lcd_setstatuspgm(PSTR(x))
   #define LCD_ALERTMESSAGEPGM(x) lcd_setalertstatuspgm(PSTR(x))
 
-  #define LCD_UPDATE_INTERVAL 100
-  #define LCD_STATUS_UPDATE_INTERVAL 1000
-  #define LCD_TIMEOUT_TO_STATUS 30000
-  #define FILE_SCROLL_START_DELAY	1000
-  #define FILE_SCROLL_DELAY		400
+  #define LCD_UPDATE_INTERVAL			100
+  #define LCD_FAST_UPDATE_INTERVAL		10				//	Used for jog modes, and file name scrolling
+
+  #define LCD_STATUS_UPDATE_INTERVAL	1000
+  #define LCD_TIMEOUT_TO_STATUS			30000
+  #define LCD_TIMEOUT_TO_STATUS_LONG	120000			//	Longer timeout for some menus and scripts
+
+  #define FILE_SCROLL_START_DELAY		(1000 - 2)
+  #define FILE_SCROLL_DELAY				(400 - 2)
+
+  #define ENCODER_COARSE_STEP			10				//	step increment for coarse adjustments
+
+  #define BUTTON_REPEAT_DELAY			300
+
+  #define JOG_XY_SPEED		50
+  #define JOG_XY_INC		3
+  #define JOG_Z_SPEED		5
+  #define JOG_Z_INC			1
+  #define JOG_E_SPEED		20
+  #define JOG_E_INC			2
 
   #ifdef ULTIPANEL
   void lcd_buttons_update();

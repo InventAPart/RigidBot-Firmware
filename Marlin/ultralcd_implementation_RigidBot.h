@@ -7,6 +7,7 @@
 **/
 
 extern volatile uint8_t buttons;  //the last checked buttons in a bit array.
+extern volatile uint8_t buttonHold;  //the last checked persistent state of buttons in a bit array.
 
 ////////////////////////////////////
 // Setup button and encode mappings for each panel (into 'buttons' variable)
@@ -281,11 +282,53 @@ Possible status screens:
        |F100%  SD100% T--:--|
        |Status line.........|
 */
+
+static void lcd_implementation_about_screen()
+{
+	lcd.setCursor(0, 0);
+	lcd_printPGM(PSTR(MACHINE_NAME));
+
+	lcd.setCursor(0, 1);
+	//lcd_printPGM(PSTR("FW Ver: "));
+	//lcd_printPGM(PSTR(RIGIDBOT_VERSION));
+	lcd_printPGM(PSTR("F/W: "));
+	lcd_printPGM(PSTR(RIGIDBOT_VERSION));
+	lcd_printPGM(PSTR(" "));
+	lcd_printPGM(PSTR(RIGIDBOT_DATE));
+
+	lcd.setCursor(0, 2);
+	lcd_printPGM(PSTR("Ext: "));
+#ifdef RIGIDBOT_DUAL_EXTRUDER
+	lcd_printPGM(PSTR("Dual"));
+#else
+	lcd_printPGM(PSTR("Single"));
+#endif
+
+	//lcd.setCursor(13, 2);
+	lcd_printPGM(PSTR(" Big: "));
+#ifdef RIGIDBOT_BIG
+	lcd_printPGM(PSTR("YES"));
+#else
+	lcd_printPGM(PSTR("NO"));
+#endif
+
+//	lcd.setCursor(0, 2);
+//	lcd_printPGM(PSTR("Compiled: "));
+//	lcd.setCursor(0, 3);
+//	lcd_printPGM(PSTR(STRING_VERSION_CONFIG_H));
+	lcd.setCursor(0, 3);
+	lcd_printPGM(PSTR("XYZ: "));
+	lcd.print(itostr3(X_MAX_LENGTH));
+    lcd.print('x');
+	lcd.print(itostr3(Y_MAX_LENGTH));
+	lcd.print('x');
+	lcd.print(itostr3(Z_MAX_LENGTH));
+}
+
 static void lcd_implementation_status_screen()
 {
     int tHotend=int(degHotend(0) + 0.5);
     int tTarget=int(degTargetHotend(0) + 0.5);
-
 
     lcd.setCursor(0, 0);
     lcd.print(LCD_STR_THERMOMETER[0]);
@@ -375,6 +418,7 @@ static void lcd_implementation_status_screen()
     lcd.setCursor(0, LCD_HEIGHT - 1);
     lcd.print(lcd_status_message);
 }
+
 static void lcd_implementation_drawmenu_generic(uint8_t row, const char* pstr, char pre_char, char post_char)
 {
     char c;
@@ -579,6 +623,27 @@ static void lcd_implementation_drawmenu_sdfile_base(uint8_t row, const char* pst
 #define lcd_implementation_drawmenu_gcode(row, pstr, gcode) lcd_implementation_drawmenu_generic(row, pstr, ' ', ' ')
 #define lcd_implementation_drawmenu_function_selected(row, pstr, data) lcd_implementation_drawmenu_generic(row, pstr, '>', ' ')
 #define lcd_implementation_drawmenu_function(row, pstr, data) lcd_implementation_drawmenu_generic(row, pstr, ' ', ' ')
+
+static void lcd_implementation_drawmenu_dynamicFunction_draw(uint8_t row, const char* str, char pre_char)
+{
+	char c;
+	//Use all characters in narrow LCDs
+	uint8_t n = LCD_WIDTH - 1;
+	lcd.setCursor(0, row);
+	lcd.print(pre_char);
+	while( ((c = *str) != '\0') && (n>0) )
+	{
+		lcd.print(c);
+		str++;
+		n--;
+	}
+	while(n--)
+		lcd.print(' ');
+}
+
+#define lcd_implementation_drawmenu_dynamicFunction_selected(row, pstr, data, str) lcd_implementation_drawmenu_dynamicFunction_draw(row, str, '>')
+#define lcd_implementation_drawmenu_dynamicFunction(row, pstr, data, str) lcd_implementation_drawmenu_dynamicFunction_draw(row, str, ' ')
+
 
 static void lcd_implementation_quick_feedback()
 {
